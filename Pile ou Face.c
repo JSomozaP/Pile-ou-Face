@@ -30,7 +30,8 @@ int main(){
     } else {
         if (resultat == 0){
             printf("\nPile !\n\nC'est perdu, dommage ...\n");
-        } else {
+        }
+         else {
             printf("\nFace !\n\nC'est perdu, dommage ...\n");
         }
     }
