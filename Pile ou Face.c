@@ -8,7 +8,7 @@
 #define FACE 2
 #define QUITTER 0
 
-
+//Fonction pour convertir une chaîne en minuscules.....en théorie
 void convertirmin(char *str) {
     for (int i=0; str[i] != '\0'; i++) {
         if (str[i]>='A' && str[i] <= 'Z') {
@@ -22,20 +22,20 @@ void convertirmin(char *str) {
         }
     }
 }
-
+//Fonction pour normallement traier les differentes orthos des reponses utilisateur
 int reportho(char * reponse){
     size_t longueur = strlen(reponse);
     if (longueur > 0 && reponse [longueur - 1]== '\n') {
-            reponse[longueur -1] = '\0';
+            reponse[longueur -1] = '\0'; // normalement ce machin supprime le retour à la ligne
     }
 
     convertirmin(reponse);
     
-    if (strcmp(reponse, "1") == 0 || (strcmp(reponse, "pile") == 0)|| (strcmp(reponse, "PILE") == 0) || (strcmp(reponse, "pIle") == 0) || (strcmp(reponse, "p") == 0))  //Répondre 1, pile, PILE, pILe ou même p permettent de jouer PILE
+    if (strcmp(reponse, "1") == 0 || strcmp(reponse, "pile") == 0|| strcmp(reponse, "PILE") == 0 || strcmp(reponse, "pIle") == 0 || strcmp(reponse, "p") == 0)  //Répondre 1, pile, PILE, pILe ou même p permettent de jouer PILE
         return PILE;
-    if (strcmp(reponse, "2") == 0 || (strcmp(reponse, "face") == 0)||(strcmp(reponse, "FACE") == 0) || (strcmp(reponse, "fAcE") == 0) || (strcmp(reponse, "f") == 0))  //Répondre 2, face, FACE, fAcE ou même f permettent de jouer FACE
+    if (strcmp(reponse, "2") == 0 || strcmp(reponse, "face") == 0||strcmp(reponse, "FACE") == 0 || strcmp(reponse, "fAcE") == 0 || strcmp(reponse, "f") == 0)  //Répondre 2, face, FACE, fAcE ou même f permettent de jouer FACE
         return FACE;
-    if (strcmp(reponse, "0") == 0 || (strcmp(reponse, "quitter") == 0)||(strcmp(reponse, "quit") == 0) || (strcmp(reponse, "exit") == 0) || (strcmp(reponse, "q") == 0))   //Répondre 0, quitter, quit, exit ou même q permettent de jouer PILE
+    if (strcmp(reponse, "0") == 0 || strcmp(reponse, "quitter") == 0||strcmp(reponse, "quit") == 0 || strcmp(reponse, "exit") == 0 || strcmp(reponse, "q") == 0)   //Répondre 0, quitter, quit, exit ou même q permettent de jouer PILE
         return 0;
     
     return -1;
@@ -80,10 +80,10 @@ int main(){
             continue;
         }
     
-        
+        fflush(stdin);
         choix = reportho(reponse);
 
-        if (choix == 0) {
+        if (choix == QUITTER) {
             printf ("Vous quittez le jeu\n");
             break;
         }
@@ -96,12 +96,18 @@ int main(){
     }
     printf("\nvous faites %s \n", (choix == PILE) ? "Pile":"Face");
     printf("\nLa pièce est jetée\n\n");
+    
     for (int i=0; i < 3; i++){
         sleep(1);
+        printf(".");
+        fflush(stdout); //Apparemment fgets peut causer des bugs dus au buffer de saisie, donc ajouter un fflush aiderai à éviter les entrées erronées
+    }
+
+        printf("\n\n");
 
         resultat=(rand()%2) + 1;  // 1 = PILE et 2 = FACE
         printf("%s \n\n", (resultat == PILE) ? "PILE" :"FACE");
-    }
+    
     if (choix == resultat) {
         printf("\nC'est gagné, bien joué !\n");
         reussites++;
@@ -111,12 +117,15 @@ int main(){
         echecs++;
     }
 
-    printf("reussites : %d\nEchecs : %d\n\n",reussites, echecs);
+    printf("reussites : %d\nEchecs : %d\n\n", reussites, echecs);
     printf("|--------------------------|\n");
 
     if (echecs >= 10) {
         printf("Trop d'echecs\n");
+    
     }
+
+
 
     printf("##########GAME OVER##########\n");
     printf("reussites : %d\nEchecs : %d\n", reussites, echecs);
