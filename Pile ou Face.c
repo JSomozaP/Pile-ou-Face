@@ -10,6 +10,7 @@
 
 //Fonction pour convertir une chaîne en minuscules.....en théorie
 void convertirmin(char *str) {
+    if(str == NULL) return; //securité pour éviter les erreurs si la chaîne est NULL
     for (int i=0; str[i] != '\0'; i++) {
         if (str[i]>='A' && str[i] <= 'Z') {
             printf("%c\t",str[i]);
@@ -24,6 +25,10 @@ void convertirmin(char *str) {
 }
 //Fonction pour normallement traier les differentes orthos des reponses utilisateur
 int reportho(char * reponse){
+    /*char*pos;
+    if((pos=strchr(reponse, '\n'))!=NULL){
+        *pos = '\0'; */
+
     size_t longueur = strlen(reponse);
     if (longueur > 0 && reponse [longueur - 1]== '\n') {
             reponse[longueur -1] = '\0'; // normalement ce machin supprime le retour à la ligne
@@ -36,7 +41,7 @@ int reportho(char * reponse){
     if (strcmp(reponse, "2") == 0 || strcmp(reponse, "face") == 0||strcmp(reponse, "FACE") == 0 || strcmp(reponse, "fAcE") == 0 || strcmp(reponse, "f") == 0)  //Répondre 2, face, FACE, fAcE ou même f permettent de jouer FACE
         return FACE;
     if (strcmp(reponse, "0") == 0 || strcmp(reponse, "quitter") == 0||strcmp(reponse, "quit") == 0 || strcmp(reponse, "exit") == 0 || strcmp(reponse, "q") == 0)   //Répondre 0, quitter, quit, exit ou même q permettent de jouer PILE
-        return 0;
+        return QUITTER;
     
     return -1;
 
@@ -79,28 +84,38 @@ int main(){
             printf("\nErreur de saisie, veuillez réessayer !\n\n");
             continue;
         }
+
+        //supprime le retour à la ligne ajouté par fgets
+        size_t len=strlen(reponse);
+        if(len>0 && reponse[len - 1]== '\n'){
+            reponse[len - 1]= '\0';
+        }
     
-        fflush(stdin);
+        //fflush(stdin);
+        // Normalisation de la réponse utilisateur
         choix = reportho(reponse);
 
-        if (choix == QUITTER) {
+        if (choix == QUITTER) { //si l'utilisateur veut quitter
             printf ("Vous quittez le jeu\n");
-            break;
+            break; //effectue une sortie de boucle
         }
         
-        else if (choix == -1) {
+        else if (choix == -1) { //si l'entrée est invalide
             printf ("Choix invalide\n");
             continue;
         } 
 
-    }
+    //affiche le choix utilisateur
     printf("\nvous faites %s \n", (choix == PILE) ? "Pile":"Face");
     printf("\nLa pièce est jetée\n\n");
-    
+
+    //affichage du suspense avec un temps d'attente
     for (int i=0; i < 3; i++){
         sleep(1);
         printf(".");
         fflush(stdout); //Apparemment fgets peut causer des bugs dus au buffer de saisie, donc ajouter un fflush aiderai à éviter les entrées erronées
+                        //apparement force l'affichage immédiat des points
+    
     }
 
         printf("\n\n");
@@ -122,8 +137,10 @@ int main(){
 
     if (echecs >= 10) {
         printf("Trop d'echecs\n");
-    
-    }
+        break;
+
+    }    
+}
 
 
 
