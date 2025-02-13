@@ -13,12 +13,12 @@ void convertirmin(char *str) {
     if(str == NULL) return; //securité pour éviter les erreurs si la chaîne est NULL
     for (int i=0; str[i] != '\0'; i++) {
         if (str[i]>='A' && str[i] <= 'Z') {
-            printf("%c\t",str[i]);
+                printf("%c\t",str[i]);
             // str[i] = 'e';
             // str[i] = str[i] + ('a'-'A');
-            str[i] = str[i] +32; //si les caractères sont en majuscules, ajouter 32 à leur valeur ASCII les convertiront en minuscule
+                str[i] = str[i] +32; //si les caractères sont en majuscules, ajouter 32 à leur valeur ASCII les convertiront en minuscule
         }else if(str[i]<='a' && str[i]>='z'){
-            str[i]=str[i] -32;
+                str[i]=str[i] -32;
 
         }
     }
